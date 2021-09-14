@@ -20,14 +20,14 @@ async function scrape(port, url) {
   const photos = [];
   $('.serp-item img').slice(0, 5).each((i, el) => {
     const img = $(el);
-    photos.push(img.attr('src') + ',' + '\n');
+    photos.push('\n' + img.attr('src'));
   });
 
   browser.close();
 
-  console.log(photos);
-  return fs.appendFileSync('links.json', `{\n${photos}}\n`); 
-  
+  // console.log(photos);
+  fs.appendFileSync('links.json', `{\n${photos}\n}\n`); 
+  return photos;
 }
 
 async function main() {
@@ -192,10 +192,32 @@ async function main() {
     /**
      * ...каждый раз - с новым номером порта.
      */
-    console.log(await scrape(ports[i], urlafter));
-       
-    i++;
-    ii++;
+    // console.log(await scrape(ports[i], urlafter));
+    if (await scrape(ports[i], urlafter) == '') {
+      console.log('hyi');
+      i++;
+      await scrape(ports[i], urlafter)
+      console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    } else {
+      i++;
+      ii++;
+      console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    }
+
+
+    // if (await scrape(ports[i], urlafter) === '') {
+    //   console.log('gavno');
+    //   i++;
+    //   await scrape(ports[i], urlafter);
+    // } else {
+    //   console.log('good');
+    //   console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    //   i++;
+    //   await scrape(ports[i], urlafter);
+      
+    //   ii++;
+    // }
+    
     
   }
  
