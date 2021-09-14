@@ -20,11 +20,14 @@ async function scrape(port, url) {
   const photos = [];
   $('.serp-item img').slice(0, 5).each((i, el) => {
     const img = $(el);
-    photos.push(img.attr('src'));
+    photos.push(img.attr('src') + ',' + '\n');
   });
 
   browser.close();
-  return photos;
+
+  console.log(photos);
+  return fs.appendFileSync('links.json', `{\n${photos}}\n`); 
+  
 }
 
 async function main() {
@@ -174,14 +177,15 @@ async function main() {
     'Регулируемая ответная планка для профильных дверей SP-001-U (190x22 мм)'
   ];
   let number = ports.length;
-  console.log(number);
+  // console.log(number);
   var i = 0;
+  var ii = 0;
  
   for (const url of urls) {
     
     let urlafter = url.replace(/ /g, '%20');
     
-    console.log(i + 1);
+    console.log(ii + 1);
     if (i > number - 1) {
       i = 0;
     }
@@ -189,7 +193,9 @@ async function main() {
      * ...каждый раз - с новым номером порта.
      */
     console.log(await scrape(ports[i], urlafter));
+       
     i++;
+    ii++;
     
   }
  
