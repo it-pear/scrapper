@@ -30,7 +30,7 @@ async function scrape(port, url) {
   // if (photos == '') {
   //   fs.appendFileSync('links.json', ''); 
   // } else {
-    fs.appendFileSync('links.json', `{\n${photos}\n},\n`); 
+    fs.appendFileSync('links.json', `{\n"${url}",\n"${photos}"\n},\n`); 
     return photos;
   // }
   
@@ -52,7 +52,6 @@ async function main() {
     '9059',
     '9060',
     '9062',
-    '9053'
   ];
   
   const urls = [
@@ -210,17 +209,14 @@ async function main() {
     try {
       if (await scrape(ports[i], url) == '') {
         console.log('hyi');
-        // if (ports[i] == 'undefined') {
-        //   i = 0;
-        // }
+
         if (i > number - 1) {
           i = 0;
         } else {
           i++;
         }
-        // i++;
-        await scrape(ports[i], url)
-        console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+        
+        error('error');
       } else {
         i++;
         ii++;
@@ -228,17 +224,22 @@ async function main() {
       }  
     } catch (e) {
       console.log(e);
-      if (await scrape(ports[i], url) == '') {
-        if (e == 'undefined') {
-          if (i > number - 1) {
-            i = 0;
-          }
-          await scrape(ports[i], url);
+      // if (await scrape(ports[i], url) == '') {
+        if (i > number - 1) {
+          i = 0;
         } else {
           i++;
-          await scrape(ports[i], url);
         }
-      }
+        // if (e == 'undefined') {
+        //   if (i > number - 1) {
+        //     i = 0;
+        //   }
+        //   await scrape(ports[i], url);
+        // } else {
+        //   i++;
+        //   await scrape(ports[i], url);
+        // }
+      // }
 
     }
     
