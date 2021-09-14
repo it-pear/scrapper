@@ -10,7 +10,8 @@ async function scrape(port, url) {
 
   const page = await browser.newPage();
   console.log(url + ' ' + port);
-  const yandex = `https://yandex.ru/images/search?text=${url}`;
+  let urlafter = url.replace(/ /g, '%20');
+  const yandex = `https://yandex.ru/images/search?text=${urlafter}`;
   const encodedURI = encodeURI(yandex);
   await page.goto(encodedURI);
   const content = await page.content();
@@ -20,14 +21,19 @@ async function scrape(port, url) {
   const photos = [];
   $('.serp-item img').slice(0, 5).each((i, el) => {
     const img = $(el);
-    photos.push('\n' + img.attr('src'));
+    photos.push('\n'+img.attr('src'));
   });
 
   browser.close();
 
   // console.log(photos);
-  fs.appendFileSync('links.json', `{\n${photos}\n}\n`); 
-  return photos;
+  // if (photos == '') {
+  //   fs.appendFileSync('links.json', ''); 
+  // } else {
+    fs.appendFileSync('links.json', `{\n${photos}\n},\n`); 
+    return photos;
+  // }
+  
 }
 
 async function main() {
@@ -38,7 +44,15 @@ async function main() {
     '9050',
     '9052',
     '9053',
-    '9054'
+    '9054',
+    '9055',
+    '9056',
+    '9057',
+    '9058',
+    '9059',
+    '9060',
+    '9062',
+    '9053'
   ];
   
   const urls = [
@@ -183,7 +197,7 @@ async function main() {
  
   for (const url of urls) {
     
-    let urlafter = url.replace(/ /g, '%20');
+    // let urlafter = url.replace(/ /g, '%20');
     
     console.log(ii + 1);
     if (i > number - 1) {
@@ -193,30 +207,40 @@ async function main() {
      * ...каждый раз - с новым номером порта.
      */
     // console.log(await scrape(ports[i], urlafter));
-    if (await scrape(ports[i], urlafter) == '') {
-      console.log('hyi');
-      i++;
-      await scrape(ports[i], urlafter)
-      console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
-    } else {
-      i++;
-      ii++;
-      console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    try {
+      if (await scrape(ports[i], url) == '') {
+        console.log('hyi');
+        // if (ports[i] == 'undefined') {
+        //   i = 0;
+        // }
+        if (i > number - 1) {
+          i = 0;
+        } else {
+          i++;
+        }
+        // i++;
+        await scrape(ports[i], url)
+        console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+      } else {
+        i++;
+        ii++;
+        console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+      }  
+    } catch (e) {
+      console.log(e);
+      if (await scrape(ports[i], url) == '') {
+        if (e == 'undefined') {
+          if (i > number - 1) {
+            i = 0;
+          }
+          await scrape(ports[i], url);
+        } else {
+          i++;
+          await scrape(ports[i], url);
+        }
+      }
+
     }
-
-
-    // if (await scrape(ports[i], urlafter) === '') {
-    //   console.log('gavno');
-    //   i++;
-    //   await scrape(ports[i], urlafter);
-    // } else {
-    //   console.log('good');
-    //   console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
-    //   i++;
-    //   await scrape(ports[i], urlafter);
-      
-    //   ii++;
-    // }
     
     
   }
