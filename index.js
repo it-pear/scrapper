@@ -45,15 +45,30 @@ async function main() {
     '9052',
     '9053',
     '9054',
-    '9055',
-    '9056',
-    '9057',
-    '9058',
-    '9059',
-    '9060',
-    '9062',
+    '9055'
   ];
-  
+  const porf = [
+    'qwe',
+    'sdfsdfsdf',
+    'cvbcvbc',
+    'zzzzz',
+    'aaaaaa',
+    'kkkkkkkkk',
+    'jjjjjjjjjjjjj',
+    'hhhhhhh',
+    'fghgfh',
+    'uiou',
+    'xcvfgh',
+  ];
+  var myArray = [123, 15, 187, 32];
+  // for(let a = 0, b = 0; a < ports.length && b < porf.length; a++, b++) {
+  //   console.log(ports[a % porf.length], porf[b]);
+  // }
+  for (const [i, value] of porf.entries()) {
+    // console.log(value);
+    console.log(ports[i % ports.length], value);
+  }
+
   const urls = [
     'Защелка APECS 5300-WC-AC',
     'Защелка магнитная Apecs 5800-M-G золото',
@@ -194,57 +209,59 @@ async function main() {
   var i = 0;
   var ii = 0;
  
-  for (const url of urls) {
+  // for (const url of urls) {
     
-    // let urlafter = url.replace(/ /g, '%20');
+  //   // let urlafter = url.replace(/ /g, '%20');
     
-    console.log(ii + 1);
-    if (i > number - 1) {
-      i = 0;
-    }
-    /**
-     * ...каждый раз - с новым номером порта.
-     */
-    // console.log(await scrape(ports[i], urlafter));
-    try {
-      if (await scrape(ports[i], url) == '') {
-        console.log('hyi');
+  //   console.log(ii + 1);
+  //   if (i > number - 1) {
+  //     i = 0;
+  //   }
+  //   /**
+  //    * ...каждый раз - с новым номером порта.
+  //    */
+  //   // console.log(await scrape(ports[i], urlafter));
+  //   try {
+  //     if (await scrape(ports[i], url) == '') {
+  //       console.log('hyi');
 
-        if (i > number - 1) {
-          i = 0;
-        } else {
-          i++;
-        }
+  //       if (i > number - 1) {
+  //         i = 0;
+  //       } else {
+  //         i++;
+  //       }
         
-        error('error');
-      } else {
-        i++;
-        ii++;
-        console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
-      }  
-    } catch (e) {
-      console.log(e);
-      // if (await scrape(ports[i], url) == '') {
-        if (i > number - 1) {
-          i = 0;
-        } else {
-          i++;
-        }
-        // if (e == 'undefined') {
-        //   if (i > number - 1) {
-        //     i = 0;
-        //   }
-        //   await scrape(ports[i], url);
-        // } else {
-        //   i++;
-        //   await scrape(ports[i], url);
-        // }
-      // }
+  //       error('error');
+  //     } else {
+  //       i++;
+  //       ii++;
+  //       console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+  //     }  
+  //   } catch (e) {
+  //     console.log(e);
+  //     if (await scrape(ports[i], url) == '') {
+  //       if (e == 'undefined') {
+  //         if (i > number - 1) {
+  //           i = 0;
+  //         }
+  //         await scrape(ports[i], url);
+  //       } else {
+  //         i++;
+  //         await scrape(ports[i], url);
+  //       }
+  //     }
 
-    }
+  //   }
     
     
-  }
+  // }
+
+  // urls.forEach((url, i) => {
+  //   await scrape(ports[i % ports.length], url);
+  //   console.log(url + ' ' + ports[i % ports.length]);
+  // });
+
+
  
 }
 
