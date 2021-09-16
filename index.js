@@ -41,7 +41,7 @@ async function main() {
    * Номера SOCKS-портов Tor, заданные в файле torrc. 
    */
   const ports = [
-
+    '9050',
     '9052',
     '9053',
     '9054',
