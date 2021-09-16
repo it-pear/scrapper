@@ -21,7 +21,7 @@ async function scrape(port, url) {
   const photos = [];
   $('.serp-item img').slice(0, 5).each((i, el) => {
     const img = $(el);
-    photos.push('\n'+img.attr('src'));
+    photos.push('\n"'+url+'":"'+img.attr('src')+'"');
   });
 
   browser.close();
@@ -30,7 +30,7 @@ async function scrape(port, url) {
   // if (photos == '') {
   //   fs.appendFileSync('links.json', ''); 
   // } else {
-    fs.appendFileSync('links.json', `{\n"${url}",\n"${photos}"\n},\n`); 
+    fs.appendFileSync('links.json', `{\n"${url}":"${url}",${photos}\n},`); 
     return photos;
   // }
   
@@ -41,7 +41,7 @@ async function main() {
    * Номера SOCKS-портов Tor, заданные в файле torrc. 
    */
   const ports = [
-    '9050',
+
     '9052',
     '9053',
     '9054',
@@ -248,15 +248,10 @@ async function main() {
     
   // }
 
-  // urls.forEach((url, i) => {
-  //   await scrape(ports[i % ports.length], url);
-  //   console.log(url + ' ' + ports[i % ports.length]);
-  // });
 
   for (const [i, value] of urls.entries()) {
-    // console.log(value);
-    // console.log(ports[i % ports.length], value);
     await scrape(ports[i % ports.length], value);
+    console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
   }
  
 }
