@@ -45,29 +45,21 @@ async function main() {
     '9052',
     '9053',
     '9054',
-    '9055'
+    '9055',
+    '9056',
+    '9057',
+    '9058',
+    '9059',
+    '9060',
+    '9062'
   ];
-  const porf = [
-    'qwe',
-    'sdfsdfsdf',
-    'cvbcvbc',
-    'zzzzz',
-    'aaaaaa',
-    'kkkkkkkkk',
-    'jjjjjjjjjjjjj',
-    'hhhhhhh',
-    'fghgfh',
-    'uiou',
-    'xcvfgh',
-  ];
-  var myArray = [123, 15, 187, 32];
+
   // for(let a = 0, b = 0; a < ports.length && b < porf.length; a++, b++) {
   //   console.log(ports[a % porf.length], porf[b]);
   // }
-  for (const [i, value] of porf.entries()) {
-    // console.log(value);
-    console.log(ports[i % ports.length], value);
-  }
+  // for (const [i, value] of porf.entries()) {
+  //   console.log(ports[i % ports.length], value);
+  // }
 
   const urls = [
     'Защелка APECS 5300-WC-AC',
@@ -261,7 +253,11 @@ async function main() {
   //   console.log(url + ' ' + ports[i % ports.length]);
   // });
 
-
+  for (const [i, value] of urls.entries()) {
+    // console.log(value);
+    // console.log(ports[i % ports.length], value);
+    await scrape(ports[i % ports.length], value);
+  }
  
 }
 
