@@ -4,6 +4,7 @@ const fs = require('fs');
 
 
 async function scrape(port, url) {
+
   const browser = await puppeteer.launch({
     args: ['--proxy-server=socks5://127.0.0.1:' + port]
   });
@@ -21,25 +22,18 @@ async function scrape(port, url) {
   const photos = [];
   $('.serp-item img').slice(0, 5).each((i, el) => {
     const img = $(el);
-    photos.push('\n"'+url+'":"'+img.attr('src')+'"');
+    photos.push('  ["'+img.attr('src')+'"]');
   });
-
+  
   browser.close();
 
-  // console.log(photos);
-  // if (photos == '') {
-  //   fs.appendFileSync('links.json', ''); 
-  // } else {
-    fs.appendFileSync('links.json', `{\n"${url}":"${url}",${photos}\n},`); 
-    return photos;
-  // }
+  fs.appendFileSync('links.json', `\n"${url}": [\n${photos}\n],\n`); 
+  return photos;  
   
 }
 
 async function main() {
-  /**
-   * Номера SOCKS-портов Tor, заданные в файле torrc. 
-   */
+
   const ports = [
     '9050',
     '9052',
@@ -53,13 +47,6 @@ async function main() {
     '9060',
     '9062'
   ];
-
-  // for(let a = 0, b = 0; a < ports.length && b < porf.length; a++, b++) {
-  //   console.log(ports[a % porf.length], porf[b]);
-  // }
-  // for (const [i, value] of porf.entries()) {
-  //   console.log(ports[i % ports.length], value);
-  // }
 
   const urls = [
     'Защелка APECS 5300-WC-AC',
@@ -196,64 +183,49 @@ async function main() {
     'Регулируемая ответная планка для профильных дверей SP-002-L (230x30 мм) (KBE)',
     'Регулируемая ответная планка для профильных дверей SP-001-U (190x22 мм)'
   ];
-  let number = ports.length;
-  // console.log(number);
-  var i = 0;
-  var ii = 0;
- 
-  // for (const url of urls) {
-    
-  //   // let urlafter = url.replace(/ /g, '%20');
-    
-  //   console.log(ii + 1);
-  //   if (i > number - 1) {
-  //     i = 0;
-  //   }
-  //   /**
-  //    * ...каждый раз - с новым номером порта.
-  //    */
-  //   // console.log(await scrape(ports[i], urlafter));
-  //   try {
-  //     if (await scrape(ports[i], url) == '') {
-  //       console.log('hyi');
+  
+  function randomInteger(min, max) {
+    // случайное число от min до (max+1)
+    let rand = min + Math.random() * (max + 1 - min);
+    return Math.floor(rand);
+  }
 
-  //       if (i > number - 1) {
-  //         i = 0;
-  //       } else {
-  //         i++;
-  //       }
-        
-  //       error('error');
-  //     } else {
-  //       i++;
-  //       ii++;
-  //       console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
-  //     }  
-  //   } catch (e) {
-  //     console.log(e);
-  //     if (await scrape(ports[i], url) == '') {
-  //       if (e == 'undefined') {
-  //         if (i > number - 1) {
-  //           i = 0;
-  //         }
-  //         await scrape(ports[i], url);
-  //       } else {
-  //         i++;
-  //         await scrape(ports[i], url);
-  //       }
-  //     }
-
-  //   }
-    
-    
-  // }
-
+  
 
   for (const [i, value] of urls.entries()) {
-    await scrape(ports[i % ports.length], value);
-    console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    const port = ports[randomInteger(0, ports.length - 1)];
+    try {
+
+      async function start() {
+        if (await scrape(port, value) == '') {
+          start();
+        } 
+      }
+      if (await scrape(port, value) == '') {
+        start();
+      } 
+      console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+    
+    } catch (err) {
+      const port2 = ports[randomInteger(0, ports.length - 1)];
+      async function parse() {
+        // await scrape(ports[0], value);
+        async function start() {
+          if (await scrape(port, value) == '') {
+            start();
+          } 
+        }
+        if (await scrape(port, value) == '') {
+          start();
+        } 
+        console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
+      }
+      setTimeout(parse, 4000);
+    }
   }
- 
+
 }
 
+
 main();
+
