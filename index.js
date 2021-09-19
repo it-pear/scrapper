@@ -28,7 +28,7 @@ async function scrape(port, url) {
     const photos = [];
     $('.serp-item img').slice(0, 5).each((i, el) => {
       const img = $(el);
-      photos.push('  ["'+img.attr('src')+'"]');
+      photos.push('  ["https:'+img.attr('src')+'"]');
     });
     console.log(photos);
     browser.close();
