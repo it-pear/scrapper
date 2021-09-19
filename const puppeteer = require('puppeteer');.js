@@ -14,35 +14,21 @@ async function scrape(port, url) {
   let urlafter = url.replace(/ /g, '%20');
   const yandex = `https://yandex.ru/images/search?text=${urlafter}`;
   const encodedURI = encodeURI(yandex);
-  await page.goto(encodedURI,  {
-    waitUntil: 'load',
-    // Remove the timeout
-    timeout: 0
-  });
+  await page.goto(encodedURI);
   const content = await page.content();
   
   const $ = cheerio.load(content);
   
-    
-  // async function start() {
-    const photos = [];
-    $('.serp-item img').slice(0, 5).each((i, el) => {
-      const img = $(el);
-      photos.push('  ["'+img.attr('src')+'"]');
-    });
-    console.log(photos);
-    browser.close();
-
-    if (photos == '') {
-      return photos;
-    } else {
-      fs.appendFileSync('links.json', `\n"${url}": [\n${photos}\n],\n`); 
-      return photos;
-    }
+  const photos = [];
+  $('.serp-item img').slice(0, 5).each((i, el) => {
+    const img = $(el);
+    photos.push('  ["'+img.attr('src')+'"]');
+  });
   
-    
-  // }
-  // setTimeout(start, 1000);
+  browser.close();
+
+  fs.appendFileSync('links.json', `\n"${url}": [\n${photos}\n],\n`); 
+  return photos;  
   
 }
 
@@ -211,25 +197,25 @@ async function main() {
     try {
 
       async function start() {
-        if (await scrape(ports[randomInteger(0, ports.length - 1)], value) == '') {
+        if (await scrape(ports[i], value) == '') {
           start();
         } 
       }
-      if (await scrape(ports[randomInteger(0, ports.length - 1)], value) == '') {
+      if (await scrape(ports[i], value) == '') {
         start();
       } 
       console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
-
+    
     } catch (err) {
       // const port2 = ports[randomInteger(0, ports.length - 1)];
       async function parse() {
         // await scrape(ports[0], value);
         async function start() {
-          if (await scrape(ports[randomInteger(0, ports.length - 1)], value) == '') {
+          if (await scrape(ports[i], value) == '') {
             start();
           } 
         }
-        if (await scrape(ports[randomInteger(0, ports.length - 1)], value) == '') {
+        if (await scrape(ports[i], value) == '') {
           start();
         } 
         console.log('---------------------------------------------------------------------------------------------------------------------------------------------');
